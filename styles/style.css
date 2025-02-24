@@ -1,0 +1,21 @@
+/*Base*/
+@import "../styles/base/main.css";
+
+/* Component */
+@import "../styles/components/hero.css";
+@import "../styles/components/menu.css";
+@import "../styles/components/menunav.css";
+@import "../styles/components/specialites.css";
+
+/* Pages */
+@import "../styles/pages/contact.css";
+@import "../styles/pages/galerie.css";
+@import "../styles/pages/mentions.css";
+@import "../styles/pages/reservation.css";
+
+/* Layouts */
+@import "../styles/layouts/footer.css";
+@import "../styles/layouts/header.css";
+
+/* Utils */
+@import "../styles/utils/variables.css";

@@ -1,0 +1,56 @@
+.specialites {
+    background-color: rgba(248, 237, 221, 0.7);
+    text-align: center;
+}
+
+.specialites__title {
+    padding: 20px;
+    color: var(--color-deepred);
+    border-bottom: 1px solid var(--color-goldenyellow);
+    margin: 0 60px
+}
+
+.art_card {
+    margin: 20px 0;
+}
+
+
+.card__title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.card__title h3 {
+    color: var(--color-deepred);
+}
+
+.card__text {
+    margin: 0 60px;
+    padding: 10px;
+    line-height: 160%;
+    border-bottom: 1px solid var(--color-goldenyellow);
+
+}
+
+.card__img img {
+    width: 80%;
+    height: auto;
+}
+
+@media (min-width: 768px) {
+    .specialites__container {
+        display: flex;
+        border-bottom: 1px dotted var(--color-goldenyellow);
+    }
+
+    .card__text {
+        border: 0;
+        font-size: var(--font-size-md);
+    }
+
+    .mid {
+        border-right: 1px dotted var(--color-goldenyellow);
+        border-left: 1px dotted var(--color-goldenyellow);
+    }
+}

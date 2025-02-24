@@ -1,0 +1,14 @@
+.resa__container {
+    margin-top: 140px;
+    margin-bottom: 30px;
+}
+
+.card-body {
+    background-color: rgba(248, 237, 221);
+    font-family: var(--font-mono);
+}
+
+.resa__btn {
+    display: flex;
+    justify-content: center;
+}

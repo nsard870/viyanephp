@@ -1,0 +1,175 @@
+.contact__head {
+    display: flex;
+    justify-content: center;
+    color: var(--color-deepred);
+    margin: 130px 0 20px 0;
+}
+
+#section-title {
+    margin: 0 10px;
+}
+
+.contact__info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: var(--font-mono);
+}
+
+.contact__info p {
+    border-bottom: 1px solid var(--color-goldenyellow);
+    padding: var(--spacing-xs);
+    color: var(--color-deepred);
+}
+
+.contact__maps {
+    width: auto;
+    height: auto;
+    text-align: center;
+}
+
+.contact__maps iframe {
+    width: 350px;
+    height: 400px;
+}
+
+
+.contact__form {
+    background-color: var(--color-deepred);
+    text-align: center;
+}
+
+.contact__form #form-title {
+    color: var(--color-goldenyellow);
+    font-size: var(--font-size-xxxl);
+    padding-top: 10px;
+}
+
+.contact__form p {
+    color: var(--color-offwhite);
+    padding: 0px 30px;
+    line-height: 160%;
+    font-family: var(--font-mono);
+    font-size: var(--font-size-lg);
+}
+
+.contact_container {
+    margin: 0;
+    width: 80%;
+}
+
+.contact_formulaire {
+    display: flex;
+    width: auto;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.name_fields {
+    display: flex;
+    width: auto;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.name_fields input,
+textarea,
+button {
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid var(--color-goldenyellow);
+    width: 300px;
+
+}
+
+.form__bot {
+    margin: 10px 0;
+
+}
+
+.name_fields button {
+    background-color: var(--color-goldenyellow);
+    color: var(--color-offwhite);
+    font-family: var(--font-mono);
+    font-size: var(--font-size-lg);
+    border: none;
+    cursor: pointer;
+    width: 200px;
+}
+
+@media (min-width: 768px) {
+    .contact__display {
+        display: flex;
+        align-items: center;
+        justify-content: space-evenly;
+    }
+
+    .contact__info {
+        font-size: var(--font-size-lg);
+        font-weight: 500;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-evenly;
+        margin-bottom: 40px;
+    }
+
+    .contact__info p {
+        border-bottom: 0;
+        text-align: center;
+        margin-bottom: 0;
+    }
+
+    .contact__info address {
+        margin-bottom: 0;
+    }
+    .contact__info__center {
+        border-left: 2px solid var(--color-goldenyellow);
+        border-right: 2px solid var(--color-goldenyellow);
+        width: 30%;
+    }
+
+    .contact__head h1 {
+        font-size: var(--font-size-xxl);
+        font-weight: 500;
+    }
+
+    .contact__form {
+        width: 650px;
+        height: auto;
+    }
+
+    .name_fields input {
+        margin: 10px;
+    }
+    .form__top {
+        display: flex;
+        justify-content: space-around;
+    }
+    .form__mid {
+        display: flex;
+    }
+
+    .form__bottom {
+        margin-bottom: 5px;
+    }
+
+    .contact__form h2 {
+        margin: 10px;
+    }
+
+    .contact__form__container {
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        margin: 30px;
+    }
+
+    .contact__maps iframe {
+        width: 650px;
+        height: 572px;
+    }
+}

@@ -1,0 +1,54 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+
+
+:root {
+
+    /* Primary Colors */
+    --color-darkbrown: #2E2013;
+    --color-deepred: #990000;
+    --color-goldenyellow: #D4AF37;
+    --color-earthybrown: #8b4513;
+    --color-offwhite: #f5f5dc;
+    --color-creamwhite: #f8eddd;
+
+    /* Gray Colors */
+    --color-black: #000000;
+    --color-darkgray: #252525;
+    --color-gray: #7b7b7b;
+    --color-lightgray: #f7f7f7;
+    --color-white: #ffffff;
+    --color-bkgoffwhite: #fffbf5;
+
+    /* Typography */
+    --font-mono: 'Space Grotesk', serif;
+    --font-sans: 'Open Sans', sans-serif;
+
+    /* Font Sizes */
+    --font-size-xxs: clamp(0.65rem, 0.5vw + 0.4rem, 0.75rem);
+    /* ~10px à 12px */
+    --font-size-xs: clamp(0.75rem, 0.6vw + 0.45rem, 0.875rem);
+    /* ~12px à 14px */
+    --font-size-sm: clamp(0.875rem, 0.8vw + 0.5rem, 1rem);
+    /* ~14px à 16px */
+    --font-size-md: clamp(1rem, 1vw + 0.55rem, 1.125rem);
+    /* ~16px à 18px */
+    --font-size-lg: clamp(1.125rem, 1.2vw + 0.6rem, 1.25rem);
+    /* ~18px à 20px */
+    --font-size-xl: clamp(1.25rem, 1.8vw + 0.7rem, 1.5rem);
+    /* ~20px à 24px */
+    --font-size-xxl: clamp(1.5rem, 2.5vw + 0.8rem, 2rem);
+    /* ~24px à 32px */
+    --font-size-xxxl: clamp(2rem, 4vw + 1rem, 3rem);
+    /* ~32px à 48px */
+
+    /* Spacing */
+    --spacing-xxs: 0.25rem;
+    --spacing-xs: 0.5rem;
+    --spacing-sm: 1rem;
+    --spacing-md: 1.5rem;
+    --spacing-lg: 2rem;
+    --spacing-xl: 3rem;
+    --spacing-xxl: 4rem;
+    --spacing-xxxl: 6rem;
+
+}

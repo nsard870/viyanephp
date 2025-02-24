@@ -1,0 +1,22 @@
+.mentions__container {
+    padding: 10px;
+}
+
+.mentions__container address, p, ul {
+    font-weight: 500;
+    font-size: var(--font-size-lg);
+}
+
+.title {
+    color: var(--color-darkbrown);
+}
+
+.subtitle {
+    color: var(--color-deepred);
+}
+
+@media (min-width: 767px) {
+    .mentions__container address, p, ul {
+        font-size: var(--font-size-md);
+    }
+}

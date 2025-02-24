@@ -1,0 +1,74 @@
+body {
+    font-family: var(--font-sans);
+    font-size: var(--font-size-sm);
+    color: var(--color-darkgray);
+    background-image: url("../../assets/image/oriental.webp");
+    margin: 0;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: var(--font-mono);
+    font-weight: 500;
+}
+
+h2 {
+    font-size: var(--font-size-xxl);
+    color: var(--color-darkbrown);
+}
+
+h3 {
+    font-size: var(--font-size-xl);
+    color: var(--color-darkbrown);
+}
+
+.list__unstyled {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    justify-content: center;
+}
+
+.list__unstyled a {
+    text-decoration: none;
+    color: var(--color-darkbrown);
+}
+
+/* Flèche pour remonter au scroll */
+
+#scrollToTop {
+    position: fixed;
+    /* Fixe la flèche à l'écran */
+    bottom: 20px;
+    /* Position en bas */
+    right: 20px;
+    /* Position à droite */
+    display: none;
+    /* Masque la flèche au début */
+    background-color: #000000;
+    /* Couleur de fond (rouge profond) */
+    color: #F5F5DC;
+    /* Couleur de l'icône (blanc cassé) */
+    padding: 10px;
+    /* Marge intérieure */
+    border-radius: 5px;
+    /* Bord arrondi */
+    z-index: 1000;
+    /* Assure que la flèche est au-dessus des autres éléments */
+    opacity: 0.8;
+    /* Opacité */
+}
+
+#scrollToTop:hover {
+    opacity: 1;
+    /* Opacité au survol */
+}
+
+#scrollToTop i {
+    font-size: 30px;
+    /* Taille de l'icône */
+}

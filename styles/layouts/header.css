@@ -1,0 +1,55 @@
+.header {
+    position: fixed;
+    z-index: 10;
+    top: 0;
+    left: 0;
+    width: 100%;
+    min-height: 80px;
+    padding: 0px;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    padding: 0 var(spacing-xxl);
+    transition: all 0.4s ease;
+    background-color: rgb(245, 245, 220, 0.9);
+
+    &.headroom--not-top {
+        background-color: rgb(245, 245, 220, 0.9);
+    }
+}
+
+.header__start {
+    margin: 5px;
+    margin-left: 40px;
+    flex: 1;
+}
+
+.header__end {
+    display: flex;
+    flex-direction: row-reverse;
+    flex: 1;
+    margin-right: 40px;
+}
+
+.headroom {
+    transition: transform 200ms linear;
+}
+
+.headroom--pinned {
+    transform: translateY(0%);
+}
+
+.headroom--unpinned {
+    transform: translateY(-100%);
+}
+
+.headroom--not-top .menuBurger__bar,
+.headroom--not-top .menuBurger__bar::before,
+.headroom--not-top .menuBurger__bar::after {
+    background: var(--color-goldenyellow);
+}
+
+.header__balise {
+    margin-top: 110px;
+}
+
