@@ -69,3 +69,28 @@ document.getElementById('scrollToTop').addEventListener('click', function (e) {
         behavior: 'smooth' /* Animation de scroll */
     });
 });
+
+// Accès administration caché
+document.addEventListener('DOMContentLoaded', function () {
+    const adminTrigger = document.getElementById('viyane-trigger');
+
+    if (adminTrigger) {
+        let clickCount = 0;
+
+        adminTrigger.addEventListener('click', function () {
+            clickCount++;
+
+            if (clickCount >= 3) { // Nombre de clics pour révéler le lien
+                window.location.href = 'moduleresa/viyaneadmin/admin.php';
+            }
+        });
+
+        adminTrigger.addEventListener('mouseover', function () {
+            adminTrigger.style.opacity = 1;
+        });
+
+        adminTrigger.addEventListener('mouseout', function () {
+            adminTrigger.style.opacity = 0.5;
+        });
+    }
+});
