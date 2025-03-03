@@ -19,16 +19,12 @@
     opacity: 1;
 }
 
-.menu__list {
-    margin-top: 25vh;
-    margin-left: 10vw;
-}
-
 .menu__item {
     width: 250px;
     line-height: 2;
-    margin-top: var(--spacing-sm);
+    margin: 2rem auto;
     border-bottom: 1px solid var(--color-goldenyellow);
+    font-size: var(--font-size-xxl);
 }
 
 .menu .menu__link {
@@ -92,6 +88,10 @@
         left: auto;
         inset: 0 0 auto auto;
         transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    .menu__item {
+        font-size: var(--font-size-lg);
     }
 
 }

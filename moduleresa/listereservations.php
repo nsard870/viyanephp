@@ -15,9 +15,18 @@ $current_page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 $current_page = max(1, $current_page); // Ensure page is at least 1
 $offset = ($current_page - 1) * $items_per_page;
 
+// --- Search Functionality ---
+$search = isset($_GET['search']) ? htmlspecialchars($_GET['search']) : '';
+
 // --- Total Number of Reservations (for pagination) ---
 try {
-    $total_reservations_stmt = $pdo->query("SELECT COUNT(*) FROM reservations");
+    $total_reservations_stmt = $pdo->prepare("SELECT COUNT(*) 
+                                                FROM clients
+                                                WHERE nom 
+                                                LIKE :search 
+                                                OR prenom 
+                                                LIKE :search");
+    $total_reservations_stmt->execute([':search' => "%$search%"]);
     $total_reservations = $total_reservations_stmt->fetchColumn();
 } catch (PDOException $e) {
     echo "<div class='alert alert-danger'>Erreur lors du comptage des réservations: " . htmlspecialchars($e->getMessage()) . "</div>";
@@ -25,14 +34,15 @@ try {
     $total_reservations = 0; // Default to 0 on error
 }
 
-
-// --- Fetch Reservations (with LIMIT and OFFSET) ---
+// --- Fetch Reservations (with LIMIT, OFFSET, and SEARCH) ---
 try {
     $reqsql = $pdo->prepare("SELECT r.*, c.nom, c.prenom, c.email, c.telephone
                             FROM reservations r
                             INNER JOIN clients c ON r.id_client = c.id_client
+                            WHERE c.nom LIKE :search OR c.prenom LIKE :search
                             ORDER BY r.date_heure ASC
-                            LIMIT :limit OFFSET :offset");  // Add LIMIT and OFFSET
+                            LIMIT :limit OFFSET :offset");
+    $reqsql->bindValue(':search', "%$search%", PDO::PARAM_STR);
     $reqsql->bindValue(':limit', $items_per_page, PDO::PARAM_INT);
     $reqsql->bindValue(':offset', $offset, PDO::PARAM_INT);
     $reqsql->execute();
@@ -43,7 +53,6 @@ try {
     $reservations = []; // Set to empty array on error
 }
 
-
 // --- Status Update Logic (Corrected and Improved) ---
 if (isset($_POST['btn_ok']) || isset($_POST['btn_ko'])) {
     $status = isset($_POST['btn_ok']) ? 'Acceptée' : 'Refusée';
@@ -51,7 +60,9 @@ if (isset($_POST['btn_ok']) || isset($_POST['btn_ko'])) {
         $ids_a_modifier = $_POST['id_resa'];
         $placeholders = implode(',', array_fill(0, count($ids_a_modifier), '?'));
 
-        $sql_update = "UPDATE reservations SET status = ? WHERE id_reservation IN ($placeholders)";
+        $sql_update = "UPDATE reservations 
+                        SET status = ? 
+                        WHERE id_reservation IN ($placeholders)";
         $stmt_update = $pdo->prepare($sql_update);
 
         //  Bind *status* first, then IDs.
@@ -80,7 +91,9 @@ if (isset($_POST['btn_spr'])) {
         $ids_a_supprimer = $_POST['id_resa'];
         $placeholders = implode(',', array_fill(0, count($ids_a_supprimer), '?'));
 
-        $sql_suppression = "DELETE FROM reservations WHERE id_reservation IN ($placeholders)";
+        $sql_suppression = "DELETE FROM reservations 
+                            WHERE id_reservation 
+                            IN ($placeholders)";
         $stmt_suppression = $pdo->prepare($sql_suppression);
         foreach ($ids_a_supprimer as $index => $id) {
             $stmt_suppression->bindValue($index + 1, $id, PDO::PARAM_INT); // +1 car bindValue starts at 1
@@ -110,7 +123,12 @@ if (isset($_POST['btn_spr'])) {
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="modulecss/listeclients.css">
-
+    <style>
+        .spinner-border {
+            width: 3rem;
+            height: 3rem;
+        }
+    </style>
 </head>
 
 <body class="bg-light">
@@ -139,6 +157,12 @@ if (isset($_POST['btn_spr'])) {
                 <h1 class="mb-0">Liste des réservations</h1>
             </div>
             <div class="card-body">
+                <form action="" method="get" class="mb-3">
+                    <div class="input-group">
+                        <input type="text" name="search" class="form-control" placeholder="Rechercher par nom ou prénom" value="<?php echo $search; ?>">
+                        <button class="btn btn-primary" type="submit"><i class="fas fa-search"></i> Rechercher</button>
+                    </div>
+                </form>
                 <form action="" method="post">
                     <div class="table-responsive">
                         <table class="table table-striped table-hover">
@@ -155,7 +179,6 @@ if (isset($_POST['btn_spr'])) {
                                     <th>Status</th>
                                     <th>Action</th>
                                     <th>Sélection</th>
-
                                 </tr>
                             </thead>
                             <tbody>
@@ -184,31 +207,24 @@ if (isset($_POST['btn_spr'])) {
                                     </tr>
                                 <?php endforeach; ?>
                             </tbody>
-
                         </table>
-
                     </div>
                     <div class="d-flex justify-content-between mt-3">
-
+                        <a class="btn btn-secondary btn-action" href="indexadmin.php">
+                            <i class="fas fa-arrow-left"></i> Retour au menu principal
+                        </a>
                         <button type="submit" name="btn_ok" class="btn btn-success btn-action">
                             <i class="fas fa-check"></i> Confirmer
                         </button>
                         <button type="submit" name="btn_ko" class="btn btn-danger btn-action">
                             <i class="fas fa-times"></i> Refuser
                         </button>
-
                         <button type="submit" name="btn_spr" class="btn btn-danger btn-action" onclick="return confirm('Êtes-vous sûr de vouloir supprimer les réservations sélectionnées ?');">
-                            <i class="fas fa-trash-alt"></i> Supprimer </button>
-                        <a class="btn btn-secondary btn-action" href="indexadmin.php">
-                            <i class="fas fa-arrow-left"></i> Retour au menu principal
-                        </a>
-
+                            <i class="fas fa-trash-alt"></i> Supprimer
+                        </button>
                     </div>
-
                 </form>
-
             </div>
-
         </div>
         <?php
         // Pagination links (only if there are reservations)
@@ -219,23 +235,24 @@ if (isset($_POST['btn_spr'])) {
 
             // Previous page link
             if ($current_page > 1) {
-                echo '<li class="page-item"><a class="page-link" href="?page=' . ($current_page - 1) . '">Précédent</a></li>';
+                echo '<li class="page-item"><a class="page-link" href="?page=' . ($current_page - 1) . '&search=' . $search . '">Précédent</a></li>';
             }
 
             // Page links
             for ($i = 1; $i <= $total_pages; $i++) {
-                echo '<li class="page-item' . ($i == $current_page ? ' active' : '') . '"><a class="page-link" href="?page=' . $i . '">' . $i . '</a></li>';
+                echo '<li class="page-item' . ($i == $current_page ? ' active' : '') . '"><a class="page-link" href="?page=' . $i . '&search=' . $search . '">' . $i . '</a></li>';
             }
 
             // Next page link
             if ($current_page < $total_pages) {
-                echo '<li class="page-item"><a class="page-link" href="?page=' . ($current_page + 1) . '">Suivant</a></li>';
+                echo '<li class="page-item"><a class="page-link" href="?page=' . ($current_page + 1) . '&search=' . $search . '">Suivant</a></li>';
             }
 
             echo '</ul></nav>';
         }
         ?>
-
-    
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
 
+</html>

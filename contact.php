@@ -1,11 +1,11 @@
 <?php include("header.php"); ?>
 
+<div class="hero">
+    <h1 class="hero__title">Retrouvez-nous !</h1>
+    <img class="hero__image" src="assets/image/galerie.jpg" alt="Photo plats">
+</div>
+
 <section class="contact__container">
-    <div class="contact__head">
-        <img src="assets/image/ambiance/Calque_1-2.svg" alt="decoration">
-        <h1 id="section-title">Retrouvez-nous !</h1>
-        <img src="assets/image/ambiance/Calque_1-2.svg" alt="decoration">
-    </div>
 
     <div class="contact__info">
         <address>

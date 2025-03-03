@@ -37,6 +37,7 @@
 .contact__form {
     background-color: var(--color-deepred);
     text-align: center;
+    border: 8px solid var(--color-goldenyellow);
 }
 
 .contact__form #form-title {

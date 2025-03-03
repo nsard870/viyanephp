@@ -105,7 +105,9 @@ if (isset($_POST['valid'])) {
     // 5.  Logique d'insertion (avec gestion du client existant ou nouveau)
     try {
         // Vérifier si l'email existe déjà
-        $stmt = $pdo->prepare("SELECT id_client FROM clients WHERE email = :email");
+        $stmt = $pdo->prepare("SELECT id_client 
+                                FROM clients 
+                                WHERE email = :email");
         $stmt->bindParam(':email', $email);
         $stmt->execute();
 

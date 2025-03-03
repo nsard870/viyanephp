@@ -8,6 +8,9 @@
 <div class="hero__content">
     <p class="hero__description">Explorez notre menu, un véritable voyage culinaire à travers la Turquie, la Grèce et le Kurdistan. Des mezzés savoureux aux grillades parfumées, chaque plat est une invitation à la découverte et au partage.
     </p>
+    <div class="hero__buttons">
+        <a href="reservation.php" class="hero__button">Réservez une table</a>
+    </div>
 </div>
 
 <div class="container">

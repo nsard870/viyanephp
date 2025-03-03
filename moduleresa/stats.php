@@ -45,7 +45,7 @@ try {
     foreach ($status_counts as $row) {
         $status_data[$row['status']] = $row['count'];
     }
-    //Ensure that every status is present, even if the count is 0.
+    // Ensure that every status is present, even if the count is 0.
     $status_data['Acceptée'] = $status_data['Acceptée'] ?? 0;  // Using the Null Coalescing Operator
     $status_data['Refusée'] = $status_data['Refusée'] ?? 0;
     $status_data['Attente'] = $status_data['Attente'] ?? 0;
@@ -111,8 +111,6 @@ try {
     echo "<div class='alert alert-danger'>Erreur lors de la récupération des réservations : " . htmlspecialchars($e->getMessage()) . "</div>";
     error_log("PDO Error (fetching recent reservations): " . $e->getMessage());
 }
-
-
 ?>
 
 <!DOCTYPE html>
@@ -129,7 +127,12 @@ try {
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="modulecss/listeclients.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
+    <style>
+        .spinner-border {
+            width: 3rem;
+            height: 3rem;
+        }
+    </style>
 </head>
 
 <body class="bg-light">
@@ -227,7 +230,6 @@ try {
                                         <th>Personnes</th>
                                         <th>Téléphone</th>
                                         <th>Statut</th>
-
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -259,12 +261,12 @@ try {
                     datasets: [{
                         label: 'Réservations',
                         data: <?php echo $chart_data; ?>, //  Y-axis data (counts)
-                        backgroundColor: 'rgba(75, 192, 192, 0.2)', //  Fill color
-                        borderColor: 'rgba(75, 192, 192, 1)', //  Line color
+                        backgroundColor: '#D4AF37', //  Fill color
+                        borderColor: '#990000', //  Line color
                         borderWidth: 2,
                         tension: 0.4, //  Smooth lines
                         pointRadius: 5, //  Larger points
-                        pointBackgroundColor: 'rgba(75, 192, 192, 1)', // Point color
+                        pointBackgroundColor: '#D4AF37', // Point color
                         pointBorderColor: '#fff', // Point border color
                         pointHoverRadius: 7, //  Larger radius on hover
                     }]

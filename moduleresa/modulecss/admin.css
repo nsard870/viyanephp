@@ -7,6 +7,12 @@ body {
     /* Dégradé subtil */
 }
 
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .card {
     border: none;
     border-radius: 1rem;
@@ -17,11 +23,11 @@ body {
     /* Important pour les bords arrondis avec l'image */
     max-width: 400px;
     /* Largeur maximale */
-    width: 100%;
+    width: 350px;
 }
 
 .card-header {
-    background: linear-gradient(135deg, #6B73FF, #000DFF);
+    background: linear-gradient(135deg, #990000, #660000);
     /* Dégradé pour l'en-tête */
     color: white;
     text-align: center;
@@ -58,11 +64,11 @@ body {
 .form-control:focus {
     border-color: #80bdff;
     outline: 0;
-    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+    box-shadow: 0 0 0 0.25rem rgba(153, 0, 0, 0.25);
 }
 
-.btn-primary {
-    background: linear-gradient(135deg, #6B73FF, #000DFF);
+.btn-danger {
+    background: linear-gradient(135deg, #990000, #660000);
     border: none;
     border-radius: 0.5rem;
     padding: 0.75rem 1.5rem;
@@ -70,11 +76,11 @@ body {
     font-weight: 600;
 }
 
-.btn-primary:hover,
-.btn-primary:focus {
+.btn-danger:hover,
+.btn-danger:focus {
     transform: translateY(-2px);
     box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.2);
-    background: linear-gradient(135deg, #8189ff, #1a26ff);
+    background: linear-gradient(135deg, #990000, #660000);
     /*Dégradé au hover */
 }
 

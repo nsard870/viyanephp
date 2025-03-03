@@ -11,6 +11,11 @@ body {
     font-weight: 600;
 }
 
+.nav-item {
+    display: flex;
+    align-items: center;
+}
+
 .card {
     border: none;
     border-radius: 0.75rem;
@@ -24,11 +29,14 @@ body {
 }
 
 .card-header {
-    background: linear-gradient(135deg, #007bff, #0056b3);
+    background: linear-gradient(135deg, #990000, #660000);
     color: white;
     font-weight: 600;
     border-radius: 0.75rem 0.75rem 0 0;
+}
 
+.card-header h5 {
+    color: white;
 }
 
 .table-responsive {

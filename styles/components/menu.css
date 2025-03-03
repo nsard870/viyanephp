@@ -29,6 +29,7 @@
     font-weight: bold;
     font-family: var(--font-mono);
     cursor: pointer;
+    font-size: var(--font-size-lg);
 }
 
 .menu-group__content {
@@ -48,14 +49,18 @@
     font-weight: bold;
     color: var(--color-deepred);
     font-family: var(--font-mono);
+    font-size: var(--font-size-lg)
 }
 
 .menu-item__price {
     float: right;
     font-style: italic;
     color: var(--color-deepred);
+    font-size: var(--font-size-lg);
 }
 
 .menu-item__description {
     margin: 5px 0 0 0;
+    font-weight: 500;
+    font-size: var(--font-size-lg);
 }

@@ -48,7 +48,7 @@
 }
 
 .hero__description {
-    margin: 2rem auto;
+    margin: 2rem;
     text-align: center;
     line-height: 1.8;
     font-size: 1.2rem;
@@ -58,11 +58,14 @@
 }
 
 .hero__buttons {
-    margin: 2rem;
+    margin: 20px;
+    display: flex;
 }
 
 .hero__button {
-    padding: 1rem 2rem;
+    padding: 10px;
+    margin: 10px;
+    text-align: center;
     border: none;
     text-decoration: none;
     background-color: var(--color-goldenyellow);
@@ -72,7 +75,6 @@
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     border-radius: 5px;
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
-    margin: 20px;
 }
 
 .hero__button:hover {

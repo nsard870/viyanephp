@@ -1,5 +1,5 @@
 <?php
-session_start(); 
+session_start();
 include("header.php");
 
 // Fonction pour échapper les données (sécurité XSS)
@@ -9,18 +9,21 @@ function escape($data)
 }
 ?>
 
+<div class="hero">
+    <h1 class="hero__title">Réservation</h1>
+    <img class="hero__image" src="assets/image/galerie/6.png" alt="Photo plats">
+</div>
+
+<div class="hero__content">
+    <p class="hero__description">Réservez votre table dès maintenant et préparez-vous à un voyage culinaire inoubliable !
+    </p>
+</div>
+
 <div class="container reservation-container">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">
-                    <h1 class="mb-0">Réservation</h1>
-                </div>
+            <div class="card card-menu">
                 <div class="card-body">
-                    <p class="intro-paragraph">
-                        Réservez votre table dès maintenant et préparez-vous à un voyage culinaire inoubliable !
-                    </p>
-
                     <?php if (isset($_SESSION['errors'])): ?>
                         <div class="alert alert-danger" role="alert">
                             <ul>
@@ -75,7 +78,7 @@ function escape($data)
                             </div>
                         </div>
 
-                        <div class="d-grid gap-2">
+                        <div class="d-flex justify-content-center ">
                             <button type="submit" name="valid" class="btn btn-reserve">Réserver</button>
                         </div>
                         <small class="text-danger">* Champs obligatoires</small>
@@ -86,4 +89,3 @@ function escape($data)
     </div>
 </div>
 <?php include("footer.php"); ?>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>

@@ -40,7 +40,7 @@ include("../config.php");
                             </div>
 
                             <div class="d-grid gap-2">
-                                <button type="submit" name="valid" class="btn btn-primary">Connexion</button>
+                                <button type="submit" name="valid" class="btn btn-danger">Connexion</button>
                             </div>
                         </form>
 

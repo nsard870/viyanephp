@@ -7,6 +7,11 @@ body {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+.nav-item {
+    display: flex;
+    align-items: center;
+}
+
 .navbar-brand {
     font-weight: 600;
 }
@@ -24,12 +29,12 @@ body {
 }
 
 .card-header {
-    background: linear-gradient(135deg, #007bff, #0056b3);
-    /*Bootstrap primary color gradient*/
+    background: linear-gradient(135deg, #990000, #660000);
+    /* Custom red gradient */
     color: white;
     font-weight: 600;
     border-radius: 0.75rem 0.75rem 0 0;
-    /*Round only the top corners*/
+    /* Round only the top corners */
     display: flex;
     justify-content: space-between;
     align-items: center;
