@@ -1,8 +1,12 @@
-<?php include("header.php"); ?>
+<?php 
+$title = "Contact - Viyane";
+$description = "Contactez-nous pour toute question ou réservation. Retrouvez nos coordonnées et horaires d'ouverture.";
+include("header.php"); 
+?>
 
 <div class="hero">
     <h1 class="hero__title">Retrouvez-nous !</h1>
-    <img class="hero__image" src="assets/image/galerie.jpg" alt="Photo plats">
+    <img class="hero__image" src="assets/image/galerie/4.png" alt="Photo plats">
 </div>
 
 <section class="contact__container">
@@ -37,7 +41,7 @@
                 spécialités turques, grecques et kurdes. Une question ? Une envie particulière ?
                 Contactez-nous !</p>
 
-            <form class="contact_formulaire" action="#" method="post" aria-labelledby="form-title">
+            <form class="contact_formulaire" action="moduleresa/traitement_formulaire.php" method="post" aria-labelledby="form-title">
                 <fieldset class="contact_container">
                     <div class="name_fields">
                         <div class="form__top">
@@ -57,6 +61,7 @@
                     </div>
                 </fieldset>
             </form>
+            
         </div>
     </div>
 </section>

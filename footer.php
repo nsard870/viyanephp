@@ -41,8 +41,7 @@
     </div>
 </footer>
 <div>
-    <a href="#" id="scrollToTop" title="Retour en haut">
-        <i class="bi bi-arrow-up-circle-fill"></i>
+    <a class="bi bi-arrow-up-circle-fill" href="#" id="scrollToTop" title="Retour en haut" >
     </a>
 </div>
 

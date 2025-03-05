@@ -3,99 +3,99 @@ session_start();
 include("config.php");
 
 if (!auth::islogged()) {
-    header('Location: admin.php'); // Redirect if not logged in
+    header('Location: admin.php');
     exit();
 }
 
 $admin_name = isset($_SESSION['login']) ? htmlspecialchars($_SESSION['login']) : 'Admin';
 
-// --- 1. Total Reservations ---
+// --- 1. Total des Réservations ---
 try {
     $total_reservations = $pdo->query("SELECT COUNT(*) FROM reservations")->fetchColumn();
 } catch (PDOException $e) {
-    $total_reservations = 0; // Default value on error
-    error_log("Error getting total reservations: " . $e->getMessage());
+    $total_reservations = 0; // Valeur par défaut en cas d'erreur
+    error_log("Erreur lors de la récupération du total des réservations : " . $e->getMessage());
 }
 
-// --- 2. Total Clients ---
+// --- 2. Total des Clients ---
 try {
     $total_clients = $pdo->query("SELECT COUNT(*) FROM clients")->fetchColumn();
 } catch (PDOException $e) {
     $total_clients = 0;
-    error_log("Error getting total clients: " . $e->getMessage());
+    error_log("Erreur lors de la récupération du total des clients : " . $e->getMessage());
 }
 
-// --- 3. Reservations Today ---
+// --- 3. Réservations Aujourd'hui ---
 try {
     $today_reservations_stmt = $pdo->prepare("SELECT COUNT(*) FROM reservations WHERE DATE(date_heure) = CURDATE()");
     $today_reservations_stmt->execute();
     $today_reservations = $today_reservations_stmt->fetchColumn();
 } catch (PDOException $e) {
     $today_reservations = 0;
-    error_log("Error getting today's reservations: " . $e->getMessage());
+    error_log("Erreur lors de la récupération des réservations d'aujourd'hui : " . $e->getMessage());
 }
 
-// --- 4. Reservations by Status ---
+// --- 4. Réservations par Statut ---
 try {
     $status_counts_stmt = $pdo->query("SELECT status, COUNT(*) as count FROM reservations GROUP BY status");
     $status_counts = $status_counts_stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    // Convert the result into a more convenient format for later use
+    // Convertir le résultat en un format plus pratique pour une utilisation ultérieure
     $status_data = [];
     foreach ($status_counts as $row) {
         $status_data[$row['status']] = $row['count'];
     }
-    // Ensure that every status is present, even if the count is 0.
-    $status_data['Acceptée'] = $status_data['Acceptée'] ?? 0;  // Using the Null Coalescing Operator
+    // S'assurer que chaque statut est présent, même si le compte est 0.
+    $status_data['Acceptée'] = $status_data['Acceptée'] ?? 0;  // Utilisation de l'opérateur de coalescence nulle
     $status_data['Refusée'] = $status_data['Refusée'] ?? 0;
     $status_data['Attente'] = $status_data['Attente'] ?? 0;
 } catch (PDOException $e) {
-    $status_data = ['Acceptée' => 0, 'Refusée' => 0, 'Attente' => 0]; // Default in case of error
-    error_log("Error getting status counts: " . $e->getMessage());
+    $status_data = ['Acceptée' => 0, 'Refusée' => 0, 'Attente' => 0]; // Valeur par défaut en cas d'erreur
+    error_log("Erreur lors de la récupération des comptes par statut : " . $e->getMessage());
 }
 
-// --- 5. Reservations per Day (Last 7 Days) - Chart.js Data ---
+// --- 5. Réservations par Jour (7 derniers jours) - Données pour Chart.js ---
 try {
     $reservations_per_day_stmt = $pdo->prepare("
         SELECT DATE(date_heure) AS reservation_date, COUNT(*) AS daily_count
         FROM reservations
-        WHERE date_heure >= CURDATE() - INTERVAL 6 DAY  -- Corrected to go back 6 days
+        WHERE date_heure >= CURDATE() - INTERVAL 6 DAY  -- Corrigé pour revenir 6 jours en arrière
         GROUP BY DATE(date_heure)
         ORDER BY DATE(date_heure)
     ");
     $reservations_per_day_stmt->execute();
     $reservations_per_day = $reservations_per_day_stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    // Prepare data for Chart.js.  Crucially, fill in missing dates.
+    // Préparer les données pour Chart.js. Remplir les dates manquantes.
     $labels = [];
     $data = [];
     $today = new DateTime();
-    for ($i = 6; $i >= 0; $i--) { // Go back 6 days + today = 7
-        $date = clone $today;  // Clone is *essential* here
-        $date->sub(new DateInterval("P{$i}D")); // Subtract i days.
+    for ($i = 6; $i >= 0; $i--) { // Reculer de 6 jours + aujourd'hui = 7
+        $date = clone $today;  // Le clonage est *essentiel* ici
+        $date->sub(new DateInterval("P{$i}D")); // Soustraire i jours.
         $date_string = $date->format('Y-m-d');
-        $labels[] = $date->format('D, M j');  // e.g., "Mon, Mar 4"  - Day, Month, Day of Month
+        $labels[] = $date->format('D, M j');  // ex., "Lun, Mar 4" - Jour, Mois, Jour du Mois
 
-        // Find the count for this date, or use 0 if not found
+        // Trouver le compte pour cette date, ou utiliser 0 si non trouvé
         $count = 0;
         foreach ($reservations_per_day as $row) {
             if ($row['reservation_date'] == $date_string) {
-                $count = (int)$row['daily_count']; //cast the count
+                $count = (int)$row['daily_count']; // caster le compte
                 break;
             }
         }
         $data[] = $count;
     }
 
-    $chart_labels = json_encode($labels); // Convert to JSON for Chart.js
+    $chart_labels = json_encode($labels); // Convertir en JSON pour Chart.js
     $chart_data = json_encode($data);
 } catch (PDOException $e) {
     $chart_labels = "[]";
     $chart_data = "[]";
-    error_log("Error getting reservations per day: " . $e->getMessage());
+    error_log("Erreur lors de la récupération des réservations par jour : " . $e->getMessage());
 }
 
-// --- 6. Recent Reservations (for table) ---
+// --- 6. Réservations Récentes (pour le tableau) ---
 try {
     $recent_reservations_stmt = $pdo->prepare("
         SELECT r.*, c.nom, c.prenom, c.email, c.telephone
@@ -107,9 +107,9 @@ try {
     $recent_reservations_stmt->execute();
     $recent_reservations = $recent_reservations_stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
-    $recent_reservations = []; //Empty array in case of error
+    $recent_reservations = []; // Tableau vide en cas d'erreur
     echo "<div class='alert alert-danger'>Erreur lors de la récupération des réservations : " . htmlspecialchars($e->getMessage()) . "</div>";
-    error_log("PDO Error (fetching recent reservations): " . $e->getMessage());
+    error_log("Erreur PDO (récupération des réservations récentes) : " . $e->getMessage());
 }
 ?>
 
@@ -149,7 +149,7 @@ try {
                         <span class="navbar-text me-3 text-white">Bienvenue, <?php echo $admin_name; ?></span>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link btn btn-danger btn-action" href="logout.php">Se déconnecter</a>
+                        <a class="nav-link btn btn-danger btn-action" href="viyaneadmin/logout.php">Se déconnecter</a>
                     </li>
                 </ul>
             </div>
@@ -255,31 +255,31 @@ try {
         <script>
             const ctx = document.getElementById('reservationsChart').getContext('2d');
             const reservationsChart = new Chart(ctx, {
-                type: 'line', //  Line chart
+                type: 'line', //  Graphique en ligne
                 data: {
-                    labels: <?php echo $chart_labels; ?>, //  X-axis labels (dates)
+                    labels: <?php echo $chart_labels; ?>, //  Étiquettes de l'axe X (dates)
                     datasets: [{
                         label: 'Réservations',
-                        data: <?php echo $chart_data; ?>, //  Y-axis data (counts)
-                        backgroundColor: '#D4AF37', //  Fill color
-                        borderColor: '#990000', //  Line color
+                        data: <?php echo $chart_data; ?>, //  Données de l'axe Y (comptes)
+                        backgroundColor: '#D4AF37', //  Couleur de remplissage
+                        borderColor: '#990000', //  Couleur de la ligne
                         borderWidth: 2,
-                        tension: 0.4, //  Smooth lines
-                        pointRadius: 5, //  Larger points
-                        pointBackgroundColor: '#D4AF37', // Point color
-                        pointBorderColor: '#fff', // Point border color
-                        pointHoverRadius: 7, //  Larger radius on hover
+                        tension: 0.4, //  Lignes lisses
+                        pointRadius: 5, //  Points plus grands
+                        pointBackgroundColor: '#D4AF37', // Couleur des points
+                        pointBorderColor: '#fff', // Couleur de la bordure des points
+                        pointHoverRadius: 7, //  Rayon plus grand au survol
                     }]
                 },
                 options: {
-                    responsive: true, // Make the chart responsive
-                    maintainAspectRatio: false, // Important for proper sizing in Bootstrap
+                    responsive: true, // Rendre le graphique réactif
+                    maintainAspectRatio: false, // Important pour un dimensionnement correct dans Bootstrap
                     scales: {
                         y: {
-                            beginAtZero: true, // Start y-axis at 0
+                            beginAtZero: true, // Commencer l'axe y à 0
                             ticks: {
-                                stepSize: 1, //  Force integer ticks
-                                precision: 0 //  No decimal places on y-axis
+                                stepSize: 1, //  Forcer les graduations entières
+                                precision: 0 //  Pas de décimales sur l'axe y
                             }
                         }
                     }

@@ -46,7 +46,7 @@
 .headroom--not-top .menuBurger__bar,
 .headroom--not-top .menuBurger__bar::before,
 .headroom--not-top .menuBurger__bar::after {
-    background: var(--color-goldenyellow);
+    background: var(--color-black);
 }
 
 .header__balise {

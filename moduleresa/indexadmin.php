@@ -23,9 +23,23 @@ if (isset($_POST['btn_ok']) || isset($_POST['btn_ko'])) {
             $id_reservation = intval($id_reservation);
 
             try {
+                // Récupérer l'email du client avant de mettre à jour le statut
+                $select_query = "SELECT email, status FROM reservations WHERE id_reservation = ?";
+                $select_stmt = $pdo->prepare($select_query);
+                $select_stmt->execute([$id_reservation]);
+                $reservation = $select_stmt->fetch(PDO::FETCH_ASSOC);
+                $email_client = $reservation['email'];
+                $ancien_status = $reservation['status'];
+
+                // Mettre à jour le statut de la réservation
                 $update_query = "UPDATE reservations SET status = ? WHERE id_reservation = ?";
                 $update_stmt = $pdo->prepare($update_query);
                 $update_stmt->execute([$status, $id_reservation]);
+
+                // Envoyer l'email si le statut a changé
+                if ($ancien_status != $status) {
+                    sendStatusChangeEmail($email_client, $status);
+                }
             } catch (PDOException $e) {
                 error_log("Error updating reservation: " . $e->getMessage());
             }

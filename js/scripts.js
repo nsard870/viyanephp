@@ -53,7 +53,7 @@ if (navBar) {
 // Flèche pour remonter sur le haut de page 
 window.addEventListener('scroll', function () {
     var scrollToTop = document.getElementById('scrollToTop');
-    if (window.pageYOffset > 100) { 
+    if (window.pageYOffset > 10) { 
         /* Affiche la flèche après 100px de scroll */
         scrollToTop.style.display = 'block';
     } else {

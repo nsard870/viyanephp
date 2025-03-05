@@ -4,36 +4,25 @@ body {
     justify-content: center;
     min-height: 100vh;
     background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
-    /* Dégradé subtil */
 }
 
 .container {
     display: flex;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
 }
 
 .card {
     border: none;
     border-radius: 1rem;
-    /* Bords arrondis plus prononcés */
     box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
-    /* Ombre plus douce */
-    overflow: hidden;
-    /* Important pour les bords arrondis avec l'image */
-    max-width: 400px;
-    /* Largeur maximale */
     width: 350px;
 }
 
 .card-header {
     background: linear-gradient(135deg, #990000, #660000);
-    /* Dégradé pour l'en-tête */
-    color: white;
     text-align: center;
     padding: 1.5rem 1rem;
-    /* Plus d'espace */
-    border-bottom: none;
 }
 
 .card-header h2 {
@@ -41,21 +30,17 @@ body {
     margin: 0;
     color: white;
 }
-
 .card-body {
     padding: 2rem;
-    /* Plus d'espace à l'intérieur */
 }
 
 .form-label {
     font-weight: 600;
-    /* Labels en gras */
     color: #495057;
 }
 
 .form-control {
     border-radius: 0.5rem;
-    /* Bords arrondis pour les champs */
     padding: 0.75rem 1rem;
     border: 1px solid #ced4da;
     transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
@@ -81,15 +66,12 @@ body {
     transform: translateY(-2px);
     box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.2);
     background: linear-gradient(135deg, #990000, #660000);
-    /*Dégradé au hover */
 }
 
 .alert-danger {
     border-radius: 0.5rem;
-    /* Bords arrondis pour l'alerte */
 }
 
-/* Ajout d'un style pour l'icône de mot de passe (facultatif) */
 .input-group-text {
     background-color: transparent;
     border: none;

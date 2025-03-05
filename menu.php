@@ -1,4 +1,8 @@
-<?php include("header.php"); ?>
+<?php 
+$title = "Notre Menu - Viyane";
+$description = "Explorez notre menu, un véritable voyage culinaire à travers la Turquie, la Grèce et le Kurdistan. Des mezzés savoureux aux grillades parfumées, chaque plat est une invitation à la découverte et au partage.";
+include("header.php"); 
+?>
 
 <div class="hero">
     <h1 class="hero__title">Notre Menu</h1>

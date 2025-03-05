@@ -3,22 +3,22 @@ session_start();
 include("config.php");
 
 if (!auth::islogged()) {
-    header('location: admin.php'); //  Assurez-vous que c'est le bon chemin
+    header('location: admin.php');
     exit();
 }
 
 $admin_name = isset($_SESSION['login']) ? htmlspecialchars($_SESSION['login']) : 'Admin';
 
-// --- Pagination Variables ---
-$items_per_page = 10; // Number of reservations to display per page
+//  Fonction de pagination
+$items_per_page = 10; // Nombre de réservations à afficher par page
 $current_page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-$current_page = max(1, $current_page); // Ensure page is at least 1
+$current_page = max(1, $current_page); // Assurez-vous que la page est au moins 1
 $offset = ($current_page - 1) * $items_per_page;
 
-// --- Search Functionality ---
+//  Fonctionnalité de recherche 
 $search = isset($_GET['search']) ? htmlspecialchars($_GET['search']) : '';
 
-// --- Total Number of Reservations (for pagination) ---
+// Nombre total de réservations pour la pagination
 try {
     $total_reservations_stmt = $pdo->prepare("SELECT COUNT(*) 
                                                 FROM clients
@@ -30,11 +30,11 @@ try {
     $total_reservations = $total_reservations_stmt->fetchColumn();
 } catch (PDOException $e) {
     echo "<div class='alert alert-danger'>Erreur lors du comptage des réservations: " . htmlspecialchars($e->getMessage()) . "</div>";
-    error_log("PDO Error (counting reservations): " . $e->getMessage());
-    $total_reservations = 0; // Default to 0 on error
+    error_log("Erreur PDO (comptage des réservations): " . $e->getMessage());
+    $total_reservations = 0; // Valeur par défaut à 0 en cas d'erreur
 }
 
-// --- Fetch Reservations (with LIMIT, OFFSET, and SEARCH) ---
+// Récupération des réservations avec LIMIT, OFFSET et SEARCH
 try {
     $reqsql = $pdo->prepare("SELECT r.*, c.nom, c.prenom, c.email, c.telephone
                             FROM reservations r
@@ -49,43 +49,52 @@ try {
     $reservations = $reqsql->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
     echo "<div class='alert alert-danger'>Erreur lors de la récupération des réservations : " . htmlspecialchars($e->getMessage()) . "</div>";
-    error_log("PDO Error (fetching reservations): " . $e->getMessage());
-    $reservations = []; // Set to empty array on error
+    error_log("Erreur PDO (récupération des réservations): " . $e->getMessage());
+    $reservations = []; // Définir à un tableau vide en cas d'erreur
 }
 
-// --- Status Update Logic (Corrected and Improved) ---
+// Mise à jour du statut de la reservation
 if (isset($_POST['btn_ok']) || isset($_POST['btn_ko'])) {
     $status = isset($_POST['btn_ok']) ? 'Acceptée' : 'Refusée';
     if (isset($_POST['id_resa']) && is_array($_POST['id_resa'])) {
         $ids_a_modifier = $_POST['id_resa'];
         $placeholders = implode(',', array_fill(0, count($ids_a_modifier), '?'));
 
+        // Récupérer les emails et les anciens statuts des réservations avant la mise à jour
+        $select_query = "SELECT id_reservation, email, status 
+                            FROM reservations 
+                            WHERE id_reservation 
+                            IN ($placeholders)";
+        $select_stmt = $pdo->prepare($select_query);
+        $select_stmt->execute($ids_a_modifier);
+        $reservations = $select_stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        // Mettre à jour le statut des réservations
         $sql_update = "UPDATE reservations 
                         SET status = ? 
-                        WHERE id_reservation IN ($placeholders)";
+                        WHERE id_reservation 
+                        IN ($placeholders)";
         $stmt_update = $pdo->prepare($sql_update);
-
-        //  Bind *status* first, then IDs.
-        $stmt_update->bindValue(1, $status, PDO::PARAM_STR); // Status is a string.
-
-        // Bind reservation IDs.  Start at index 2.
+        $stmt_update->bindValue(1, $status, PDO::PARAM_STR);
         foreach ($ids_a_modifier as $index => $id) {
-            $stmt_update->bindValue($index + 2, $id, PDO::PARAM_INT); // +2 because status is the 1st
+            $stmt_update->bindValue($index + 2, $id, PDO::PARAM_INT);
+        }
+        $stmt_update->execute();
+
+        // Envoyer les emails si le statut a changé
+        foreach ($reservations as $reservation) {
+            if ($reservation['status'] != $status) {
+                sendStatusChangeEmail($reservation['email'], $status);
+            }
         }
 
-        try {
-            $stmt_update->execute();
-            echo "<div class='alert alert-success'>Statut(s) mis à jour avec succès.</div>";
-            header("Location: listereservations.php?page=$current_page"); // VERY IMPORTANT. Redirect after update.
-            exit();
-        } catch (PDOException $e) {
-            echo "<div class='alert alert-danger'>Erreur lors de la mise à jour : " . htmlspecialchars($e->getMessage()) . "</div>";
-            error_log("PDO Error (update status): " . $e->getMessage());
-        }
+        echo "<div class='alert alert-success'>Statut(s) mis à jour avec succès.</div>";
+        header("Location: listereservations.php?page=$current_page");
+        exit();
     }
 }
 
-//Fonction suppression de client de la liste
+// Fonction de suppression de la liste
 if (isset($_POST['btn_spr'])) {
     if (isset($_POST['id_resa']) && is_array($_POST['id_resa'])) {
         $ids_a_supprimer = $_POST['id_resa'];
@@ -96,17 +105,17 @@ if (isset($_POST['btn_spr'])) {
                             IN ($placeholders)";
         $stmt_suppression = $pdo->prepare($sql_suppression);
         foreach ($ids_a_supprimer as $index => $id) {
-            $stmt_suppression->bindValue($index + 1, $id, PDO::PARAM_INT); // +1 car bindValue starts at 1
+            $stmt_suppression->bindValue($index + 1, $id, PDO::PARAM_INT); // +1 car bindValue commence à 1
         }
 
         try {
             $stmt_suppression->execute();
             echo "<div class='alert alert-success'>Réservation(s) supprimée(s) avec succès.</div>";
-            header("Location: listereservations.php?page=$current_page"); // Redirect, and keep the current page
+            header("Location: listereservations.php?page=$current_page"); // Rediriger et garder la page actuelle
             exit();
         } catch (PDOException $e) {
             echo "<div class='alert alert-danger'>Erreur lors de la suppression : " . htmlspecialchars($e->getMessage()) . "</div>";
-            error_log("PDO Error (deleting reservation): " . $e->getMessage());
+            error_log("Erreur PDO (suppression de réservation): " . $e->getMessage());
         }
     }
 }
@@ -144,7 +153,7 @@ if (isset($_POST['btn_spr'])) {
                         <span class="navbar-text me-3 text-white">Bienvenue, <?php echo $admin_name; ?></span>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link btn btn-danger btn-action" href="logout.php"><i class="fas fa-sign-out-alt"></i> Se déconnecter</a>
+                        <a class="nav-link btn btn-danger btn-action" href="viyaneadmin/logout.php"><i class="fas fa-sign-out-alt"></i> Se déconnecter</a>
                     </li>
                 </ul>
             </div>
@@ -227,13 +236,13 @@ if (isset($_POST['btn_spr'])) {
             </div>
         </div>
         <?php
-        // Pagination links (only if there are reservations)
+        // Lien de pagination uniquement si des réservations sont trouvées
         if ($total_reservations > 0) {
             $total_pages = ceil($total_reservations / $items_per_page);
 
             echo '<nav aria-label="Page navigation" class="mt-3"><ul class="pagination justify-content-center">';
 
-            // Previous page link
+            // Page précedente
             if ($current_page > 1) {
                 echo '<li class="page-item"><a class="page-link" href="?page=' . ($current_page - 1) . '&search=' . $search . '">Précédent</a></li>';
             }
@@ -243,7 +252,7 @@ if (isset($_POST['btn_spr'])) {
                 echo '<li class="page-item' . ($i == $current_page ? ' active' : '') . '"><a class="page-link" href="?page=' . $i . '&search=' . $search . '">' . $i . '</a></li>';
             }
 
-            // Next page link
+            // Page suivante
             if ($current_page < $total_pages) {
                 echo '<li class="page-item"><a class="page-link" href="?page=' . ($current_page + 1) . '&search=' . $search . '">Suivant</a></li>';
             }

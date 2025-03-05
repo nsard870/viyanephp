@@ -99,7 +99,7 @@ if (isset($_POST['btn_spr']) && isset($_POST['id_cli']) && is_array($_POST['id_c
                         <span class="welcome-message">Bienvenue, <?php echo $admin_name; ?></span>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link btn btn-danger btn-action" href="logout.php">Se déconnecter</a>
+                        <a class="nav-link btn btn-danger btn-action" href="viyaneadmin/logout.php">Se déconnecter</a>
                     </li>
                 </ul>
             </div>
