@@ -1,4 +1,8 @@
-<?php include("header.php"); ?>
+<?php 
+$title = "Mentions Légales - Viyane";
+$description = "Découvrez notre politique de confidentialité et nos conditions d'utilisation.";
+include("header.php"); 
+?>
 
 <body>
     <div class="container p-4 mentions__container">

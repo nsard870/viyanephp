@@ -54,7 +54,7 @@ class Auth
 // Initialize the PDO connection for the Auth class.  Do this *after* creating the PDO object.
 Auth::setPDO($pdo);
 
-
+// Fonction pour envoyer un email de notification
 function sendStatusChangeEmail($email, $status) {
     $subject = "Mise à jour de votre réservation";
     $message = "Bonjour,\n\nVotre réservation a été mise à jour avec le statut suivant : $status.\n\nMerci de votre confiance.\n\nCordialement,\nL'équipe Viyane";
