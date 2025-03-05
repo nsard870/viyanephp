@@ -6,7 +6,7 @@ include("header.php");
 
 <div class="hero" role="banner">
     <h1 class="hero__title">Bienvenue chez Viyane</h1>
-    <img class="hero__image" src="assets/image/hero.jpeg" alt="Photo de plats turcs, grecs et kurdes">
+    <img class="hero__image" src="assets/image/imageWebp/hero.webp" alt="Photo de plats turcs, grecs et kurdes">
 </div>
 
 <div class="hero__content">
@@ -50,7 +50,7 @@ include("header.php");
                 <h3 id="guvec-title">Güvec</h3>
             </div>
             <div class="card__img">
-                <img src="assets/image/platshome/Guvac.png" alt="Photographie du plat Güvec">
+                <img src="assets/image/imageWebp/Guvac.webp" alt="Photographie du plat Güvec">
             </div>
             <p class="card__text">
                 Laissez-vous tenter par notre Güvec, un plat mijoté au four où l'agneau tendre se mêle aux
@@ -87,7 +87,7 @@ include("header.php");
                 <h3 id="karniyarik-title">Karniyarik</h3>
             </div>
             <div class="card__img">
-                <img src="assets/image/platshome/KARNIYARIK.png" alt="Photographie du plat Karniyarik">
+                <img src="assets/image/imageWebp/KARNIYARIK.webp" alt="Photographie du plat Karniyarik">
             </div>
             <p class="card__text">
                 Craquez pour le Karniyarik, une spécialité turque où les aubergines se parent d'une
@@ -124,7 +124,7 @@ include("header.php");
                 <h3 id="hunkar-title">Hunkar Begendi</h3>
             </div>
             <div class="card__img">
-                <img src="assets/image/platshome/Hunkar Begendi.png" alt="Photographie du plat Hunkar Begendi">
+                <img src="assets/image/imageWebp/Hunkar.webp" alt="Photographie du plat Hunkar Begendi">
             </div>
             <p class="card__text">
                 Découvrez le Hunkar Begendi, un plat digne d'un sultan ! Savourez l'harmonie parfaite entre

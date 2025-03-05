@@ -13,7 +13,7 @@ function escape($data)
 
 <div class="hero">
     <h1 class="hero__title">Réservation</h1>
-    <img class="hero__image" src="assets/image/galerie/6.png" alt="Photo de plats">
+    <img class="hero__image" src="assets/image/imageWebp/6.webp" alt="Photo d'un plat">
 </div>
 
 <div class="hero__content">

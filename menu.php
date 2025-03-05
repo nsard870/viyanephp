@@ -6,7 +6,7 @@ include("header.php");
 
 <div class="hero">
     <h1 class="hero__title">Notre Menu</h1>
-    <img class="hero__image" src="assets/image/galerie/1.png" alt="Photo plats">
+    <img class="hero__image" src="assets/image/imageWebp/1.webp" alt="Photo d'un plat">
 </div>
 
 <div class="hero__content">
