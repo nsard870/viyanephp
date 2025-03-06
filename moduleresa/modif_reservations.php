@@ -1,10 +1,15 @@
 <?php
 session_start();
 include("config.php");
+
+// Verifier si l'utilisateur est connecté
 if (!auth::islogged()) {
     header('location:admin.php');
     die();
 }
+
+// Récupérer le nom de l'admin
+$admin_name = isset($_SESSION['login']) ? htmlspecialchars($_SESSION['login']) : 'Admin';
 
 // Récupérer les info du client par l'id
 if (isset($_GET['id'])) {

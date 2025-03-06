@@ -1,49 +1,50 @@
 <?php
-// setlocale(LC_ALL, 'fr_FR');
-// Database credentials - keep these separate and secure!  Consider using environment variables.
+
+// Informations d'identification de la base de données
 $host = "localhost";
 $dbname = "module_resa";
 $user = "root";
 $password = "root";
 
-// Establish database connection ONCE and store it.  This is a HUGE performance gain.
+// Connexion à la base de données
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname", $user, $password);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 } catch (PDOException $e) {
-    die("Database connection error: " . $e->getMessage());
+    die("Erreur de connexion à la base de données : " . $e->getMessage());
 }
 
 class Auth
 {
-    private static $pdo; // Store the PDO connection within the class
+    private static $pdo; // Propriété statique pour stocker la connexion PDO
 
-    // Inject the PDO connection into the class (Dependency Injection is good practice)
+    // Fonction statique pour configurer la connexion PDO
     public static function setPDO(PDO $pdo)
     {
         self::$pdo = $pdo;
     }
-
+    
+    // Fonction statique pour vérifier si l'utilisateur est connecté
     public static function isLogged()
     {
         if (isset($_SESSION['mdp']) && isset($_SESSION['login'])) {
             $login = $_SESSION['login'];
             $password = $_SESSION['mdp'];
 
-
-            $reqadmin = "SELECT mdp FROM admin WHERE login = :login"; // Only select what you need!
+            $reqadmin = "SELECT mdp 
+                            FROM admin 
+                            WHERE login = :login"; // Sélectionner uniquement ce dont vous avez besoin !
             $reqsql = self::$pdo->prepare($reqadmin);
             $reqsql->bindParam(':login', $login, PDO::PARAM_STR);
             $reqsql->execute();
 
-            if ($row = $reqsql->fetch(PDO::FETCH_ASSOC)) { // Directly check if a row was fetched
+            if ($row = $reqsql->fetch(PDO::FETCH_ASSOC)) { // Vérifier directement si une ligne a été récupérée
                 $mdpstocke = $row['mdp'];
                 if (password_verify($password, $mdpstocke)) {
                     return true;
                 }
             }
-            return false; // Return false if the user isn't found or password doesn't match
-
+            return false; // Retourner false si l'utilisateur n'est pas trouvé ou si le mot de passe ne correspond pas
 
         } else {
             return false;
@@ -51,7 +52,7 @@ class Auth
     }
 }
 
-// Initialize the PDO connection for the Auth class.  Do this *after* creating the PDO object.
+// Configurer la connexion PDO
 Auth::setPDO($pdo);
 
 // Fonction pour envoyer un email de notification
@@ -64,4 +65,3 @@ function sendStatusChangeEmail($email, $status) {
 }
 
 ?>
-

@@ -2,11 +2,13 @@
 session_start();
 include("config.php");
 
+// Verifier si l'utilisateur est connecté
 if (!auth::islogged()) {
     header('location: admin.php');
     exit();
 }
 
+// Récupérer le nom de l'admin
 $admin_name = isset($_SESSION['login']) ? htmlspecialchars($_SESSION['login']) : 'Admin';
 
 //  Fonction de pagination
@@ -38,7 +40,7 @@ try {
 try {
     $reqsql = $pdo->prepare("SELECT r.*, c.nom, c.prenom, c.email, c.telephone
                             FROM reservations r
-                            INNER JOIN clients c ON r.id_client = c.id_client
+                            INNER JOIN clients c ON r.id_client = c.id_client 
                             WHERE c.nom LIKE :search OR c.prenom LIKE :search
                             ORDER BY r.date_heure ASC
                             LIMIT :limit OFFSET :offset");
@@ -90,7 +92,7 @@ if (isset($_POST['btn_ok']) || isset($_POST['btn_ko'])) {
 
         echo "<div class='alert alert-success'>Statut(s) mis à jour avec succès.</div>";
         header("Location: listereservations.php?page=$current_page");
-        exit();
+        exit(); // Rediriger et garder la page actuelle
     }
 }
 
@@ -115,12 +117,13 @@ if (isset($_POST['btn_spr'])) {
             exit();
         } catch (PDOException $e) {
             echo "<div class='alert alert-danger'>Erreur lors de la suppression : " . htmlspecialchars($e->getMessage()) . "</div>";
-            error_log("Erreur PDO (suppression de réservation): " . $e->getMessage());
+            error_log("Erreur PDO (suppression de réservation): " . $e->getMessage()); // Enregistrer l'erreur
         }
     }
 }
 
 ?>
+
 <!DOCTYPE html>
 <html lang="fr">
 

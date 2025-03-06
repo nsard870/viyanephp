@@ -2,11 +2,13 @@
 session_start();
 include("config.php");
 
+// Verifier si l'utilisateur est connecté
 if (!auth::islogged()) {
     header('Location: admin.php');
     exit();
 }
 
+// Récupérer le nom de l'admin
 $admin_name = isset($_SESSION['login']) ? htmlspecialchars($_SESSION['login']) : 'Admin';
 
 // --- 1. Total des Réservations ---

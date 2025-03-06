@@ -1,11 +1,14 @@
 <?php
 session_start();
 include("config.php");
+
+// Verifier si l'utilisateur est connecté
 if (!auth::islogged()) {
     header('location:admin.php');
     die();
 }
 
+// Récupérer le nom de l'admin
 $admin_name = $_SESSION['login'];
 
 // Traitement formulaire ajout client

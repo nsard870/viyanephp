@@ -1,13 +1,17 @@
 <?php
 session_start();
 include("config.php");
+
+// Verifier si l'utilisateur est connecté
 if (!auth::islogged()) {
     header('Location: viyaneadlin/admin.php');
     die();
 }
 
+// Récupérer le nom de l'admin
 $admin_name = $_SESSION['login'];
 
+// Récupérer les réservations du jour
 $requete = "SELECT * FROM reservations r
             INNER JOIN clients c ON r.id_client = c.id_client
             WHERE DATE(date_heure) = CURDATE()
@@ -16,6 +20,7 @@ $reqsql = $pdo->prepare($requete);
 $reqsql->execute();
 $reservations = $reqsql->fetchAll(PDO::FETCH_ASSOC);
 
+// Changement de statut de la réservation
 if (isset($_POST['btn_ok']) || isset($_POST['btn_ko'])) {
     $status = (isset($_POST['btn_ok'])) ? 'Acceptée' : 'Refusée';
     if (isset($_POST['id_resa'])) {
@@ -41,11 +46,11 @@ if (isset($_POST['btn_ok']) || isset($_POST['btn_ko'])) {
                     sendStatusChangeEmail($email_client, $status);
                 }
             } catch (PDOException $e) {
-                error_log("Error updating reservation: " . $e->getMessage());
+                error_log("Error updating reservation: " . $e->getMessage()); // Enregistrer l'erreur dans le journal
             }
         }
     }
-    header("Location: indexadmin.php");
+    header("Location: indexadmin.php"); // Redirection vers la page d'accueil
     exit();
 }
 

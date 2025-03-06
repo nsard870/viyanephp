@@ -84,7 +84,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 window.location.href = 'moduleresa/viyaneadmin/admin.php';
             }
         });
-
+3
         adminTrigger.addEventListener('mouseover', function () {
             adminTrigger.style.opacity = 1;
         });

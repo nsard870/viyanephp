@@ -77,8 +77,6 @@ if (isset($_POST['valid'])) {
         exit();
     }
 
-
-
     // 3. Préparation de la date et de l'heure pour l'insertion
     if ($service == 'midi') {
         $heure = '11:30:00';  // Ou l'heure de début de votre service du midi
@@ -87,7 +85,6 @@ if (isset($_POST['valid'])) {
     }
 
     $date_heure = $date . ' ' . $heure;
-
 
     // 4. Connexion à la base de données (à l'intérieur du if(isset), car inutile si le formulaire n'est pas soumis)
     try {

@@ -2,71 +2,88 @@
 session_start();
 include("config.php");
 
+// Verifier si l'utilisateur est connecté
 if (!auth::islogged()) {
-    header('Location: admin.php'); // Redirect to login
+    header('Location: admin.php');
     exit();
 }
 
+// Récupérer le nom de l'admin
 $admin_name = isset($_SESSION['login']) ? htmlspecialchars($_SESSION['login']) : 'Admin';
 
-// --- Pagination Variables ---
-$items_per_page = 10; // Number of clients to display per page. Change this as needed.
-$current_page = isset($_GET['page']) ? (int)$_GET['page'] : 1; // Get current page, default to 1
-$current_page = max(1, $current_page); // Ensure page is at least 1.
-$offset = ($current_page - 1) * $items_per_page;
+//  Fonction de pagination
+$items_per_page = 10; 
+$current_page = isset($_GET['page']) ? (int)$_GET['page'] : 1;  
+$current_page = max(1, $current_page); 
+$offset = ($current_page - 1) * $items_per_page; // Calculer l'offset
 
-// --- Search Functionality ---
+//  Fonctionnalité de recherche
 $search = isset($_GET['search']) ? htmlspecialchars($_GET['search']) : '';
 
-// --- Total Number of Clients (for pagination) ---
+// Nombre total de clients pour la pagination
 try {
-    $total_clients_stmt = $pdo->prepare("SELECT COUNT(*) FROM clients WHERE nom LIKE :search OR prenom LIKE :search");
+    $total_clients_stmt = $pdo->prepare("SELECT COUNT(*) 
+                                            FROM clients 
+                                            WHERE nom 
+                                            LIKE :search 
+                                            OR prenom 
+                                            LIKE :search");
     $total_clients_stmt->execute([':search' => "%$search%"]);
-    $total_clients = $total_clients_stmt->fetchColumn(); // Fetch the count
+    $total_clients = $total_clients_stmt->fetchColumn(); // Récupérer le nombre total de clients
 } catch (PDOException $e) {
     echo "<div class='alert alert-danger'>Error counting clients: " . htmlspecialchars($e->getMessage()) . "</div>";
-    error_log("PDO Error (counting clients): " . $e->getMessage());
-    $total_clients = 0;
+    error_log("PDO Error (counting clients): " . $e->getMessage()); // Enregistrer l'erreur
+    $total_clients = 0; // Valeur par défaut
 }
 
-// --- Fetch Clients (with LIMIT, OFFSET, and SEARCH) ---
+// Récupérer les clients avec LIMIT, OFFSET et SEARCH
 try {
-    $reqsql = $pdo->prepare("SELECT * FROM clients WHERE nom LIKE :search OR prenom LIKE :search ORDER BY nom, prenom LIMIT :limit OFFSET :offset");
-    $reqsql->bindValue(':search', "%$search%", PDO::PARAM_STR);
+    $reqsql = $pdo->prepare("SELECT * 
+                                FROM clients 
+                                WHERE nom 
+                                LIKE :search 
+                                OR prenom 
+                                LIKE :search 
+                                ORDER BY nom, prenom 
+                                LIMIT :limit OFFSET :offset"); 
+    $reqsql->bindValue(':search', "%$search%", PDO::PARAM_STR); 
     $reqsql->bindValue(':limit', $items_per_page, PDO::PARAM_INT);
     $reqsql->bindValue(':offset', $offset, PDO::PARAM_INT);
     $reqsql->execute();
     $clients = $reqsql->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
     echo "<div class='alert alert-danger'>Erreur lors de la récupération des clients : " . htmlspecialchars($e->getMessage()) . "</div>";
-    error_log("PDO Error (fetching clients): " . $e->getMessage());
-    $clients = []; // Set to empty array on error.
+    error_log("PDO Error (fetching clients): " . $e->getMessage()); // Enregistrer l'erreur
+    $clients = []; // Valeur par défaut
 }
-
-// --- Deletion Logic (Corrected and Improved) ---
+// Suppression de clients
 if (isset($_POST['btn_spr']) && isset($_POST['id_cli']) && is_array($_POST['id_cli'])) {
-    $ids_a_supprimer = $_POST['id_cli'];
+    $ids_a_supprimer = $_POST['id_cli']; // Récupérer les IDs des clients à supprimer
     $placeholders = implode(',', array_fill(0, count($ids_a_supprimer), '?'));
 
-    $sql_suppression = "DELETE FROM clients WHERE id_client IN ($placeholders)";
+    $sql_suppression = "DELETE FROM clients 
+                        WHERE id_client 
+                        IN ($placeholders)"; // Créer la requête de suppression
     $stmt_suppression = $pdo->prepare($sql_suppression);
 
-    // Bind parameters correctly *inside* the loop
+    // Associer les IDs des clients à supprimer aux placeholders
     foreach ($ids_a_supprimer as $index => $id) {
-        $stmt_suppression->bindValue($index + 1, $id, PDO::PARAM_INT); // +1 because bindValue starts at 1
+        $stmt_suppression->bindValue($index + 1, $id, PDO::PARAM_INT); 
     }
 
+    // Exécuter la requête
     try {
         $stmt_suppression->execute();
         echo "<div class='alert alert-success'>Client(s) supprimé(s) avec succès.</div>";
-        header("Location: listeclients.php"); // Redirect *after* successful deletion.
+        header("Location: listeclients.php"); 
         exit();
     } catch (PDOException $e) {
         echo "<div class='alert alert-danger'>Erreur lors de la suppression : " . htmlspecialchars($e->getMessage()) . "</div>";
-        error_log("PDO Error (client deletion): " . $e->getMessage());
+        error_log("PDO Error (client deletion): " . $e->getMessage()); // Enregistrer l'erreur
     }
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="fr">
 

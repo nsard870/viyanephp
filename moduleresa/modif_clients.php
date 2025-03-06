@@ -2,14 +2,20 @@
 session_start();
 include("config.php");
 
+// Verifier si l'utilisateur est connecté
 if (!auth::islogged()) {
     header('location:admin.php');
     exit();
 }
 
+// Récupérer le nom de l'admin
+$admin_name = isset($_SESSION['login']) ? htmlspecialchars($_SESSION['login']) : 'Admin';
+
+// Récupérer les données du client par l'ID
 if (isset($_GET['id'])) {
     $id_client = $_GET['id'];
-    $requete = "SELECT * FROM clients WHERE id_client =:id";
+    $requete = "SELECT * FROM clients 
+                WHERE id_client =:id";
     $reqsql = $pdo->prepare($requete);
     $reqsql->bindParam(':id', $id_client, PDO::PARAM_INT);
     $reqsql->execute();
